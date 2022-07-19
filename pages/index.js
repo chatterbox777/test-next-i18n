@@ -1,8 +1,30 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-export default function Home() {
+import styles from "../styles/Home.module.css";
+import nextI18nextConfig from "../next-i18next.config";
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
+
+const Home = (props) => {
+  const router = useRouter();
+  const { locale } = useRouter();
+  const { t } = useTranslation("common");
+
+  const handleChangeLanguage = () => {
+    router.push("/", "/", { locale: locale === "ru" ? "en" : "ru" });
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -12,12 +34,15 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
+        <h1 className={styles.title}>{t("title")}</h1>
+        <button onClick={handleChangeLanguage}>
+          {" "}
+          {t("change-locale", {
+            changeTo: router.locale === "en" ? "ru" : "en",
+          })}
+        </button>
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started by editing{" "}
           <code className={styles.code}>pages/index.js</code>
         </p>
 
@@ -58,12 +83,14 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
+
+export default Home;

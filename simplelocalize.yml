@@ -1,0 +1,6 @@
+apiKey: BcbA730c4DeAb133693ca5D763Ab5a6E541d05ADC058Be9c082652aD2325cE2A
+downloadFormat: single-language-json
+downloadPath: ./public/locales/{lang}/{ns}.json
+
+uploadFormat: single-language-json
+uploadPath: ./public/locales/{lang}/{ns}.json
