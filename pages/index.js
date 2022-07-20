@@ -7,19 +7,18 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import styles from "../styles/Home.module.css";
 import nextI18nextConfig from "../next-i18next.config";
 
-export async function getStaticProps({ locale }) {
+export const getServerSideProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-      // Will be passed to the page component as props
+      ...(await serverSideTranslations(locale, ["header"], nextI18nextConfig)),
     },
   };
-}
+};
 
 const Home = (props) => {
   const router = useRouter();
   const { locale } = useRouter();
-  const { t } = useTranslation("common");
+  const [t, i18n, ready] = useTranslation("header");
 
   const handleChangeLanguage = () => {
     router.push("/", "/", { locale: locale === "ru" ? "en" : "ru" });
@@ -34,7 +33,7 @@ const Home = (props) => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>{t("title")}</h1>
+        <h1 className={styles.title}>{ready ? t("warenyky") : "ssssss"}</h1>
         <button onClick={handleChangeLanguage}>
           {" "}
           {t("change-locale", {
